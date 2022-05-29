@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Blog < ApplicationRecord
+  include ActiveModel::Validations
+  validates_with BlogValidator
   belongs_to :user
   has_many :likings, dependent: :destroy
   has_many :liking_users, class_name: 'User', source: :user, through: :likings
@@ -10,7 +12,7 @@ class Blog < ApplicationRecord
   scope :published, -> { where('secret = FALSE') }
 
   scope :search, lambda { |term|
-    where("title LIKE '%#{term}%' OR content LIKE '%#{term}%'")
+    where('title LIKE ? OR content LIKE ?', "%#{term}%", "%#{term}%")
   }
 
   scope :default_order, -> { order(id: :desc) }
