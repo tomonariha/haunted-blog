@@ -10,7 +10,7 @@ class BlogsController < ApplicationController
   end
 
   def show
-    @blog = Blog.find(params[:id])
+    @blog = Blog.published.or(Blog.owned(current_user)).find(params[:id])
   end
 
   def new
@@ -39,7 +39,6 @@ class BlogsController < ApplicationController
 
   def destroy
     @blog.destroy!
-
     redirect_to blogs_url, notice: 'Blog was successfully destroyed.', status: :see_other
   end
 
