@@ -10,7 +10,7 @@ class BlogsController < ApplicationController
   end
 
   def show
-    @blog = Blog.published.or(Blog.owned(current_user)).find(params[:id])
+    @blog = Blog.published_or_owned(current_user).find(params[:id])
   end
 
   def new
@@ -45,7 +45,7 @@ class BlogsController < ApplicationController
   private
 
   def set_blog
-    @blog = Blog.owned(current_user).find(params[:id])
+    @blog = current_user.blogs.find(params[:id])
   end
 
   def blog_params
